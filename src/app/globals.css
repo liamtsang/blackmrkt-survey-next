@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bm-white: #bebebe;
+  --bm-black: #0a0a0a;
+}
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bm-black);
+  color: var(--bm-white);
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.font-archivo {
+  font-family: Archivo;
+}
+.font-geist {
+  font-family: Geist;
+}
+.overlay-drop-shadow {
+  display: block;
+  box-shadow:
+    0px 3px 11px -7px rgba(0, 0, 0, 0.25),
+    0px 0px 1px #bebebe,
+    0px 0px 80px -30px rgba(190, 190, 190, 0.25);
+}
+
+.hover-gradient {
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(186, 186, 186, 1) 7%,
+    rgba(226, 226, 226, 1) 12%,
+    rgba(250, 247, 247, 1) 27%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(233, 233, 233, 1) 67%,
+    rgba(255, 255, 255, 1) 85%,
+    rgba(202, 202, 202, 1) 90%,
+    rgba(166, 166, 166, 1) 94%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+.survey-option:hover .hover-gradient {
+  opacity: 1;
+}
+
+.survey-option:hover {
+  color: var(--bm-black);
+}
+
+input[type="radio"] {
+  left: -999em;
+  position: absolute;
+}
