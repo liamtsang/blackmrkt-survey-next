@@ -47,7 +47,7 @@ const questions = [
 	{
 		id: "q4",
 		text: "Which Fashion Icons share your sense of style?",
-		type: "multiple_choice",
+		type: "image_multiple_choice",
 		note: "Consider using photos",
 		options: [
 			"Kanye West",
@@ -58,18 +58,18 @@ const questions = [
 			"Virgil Abloh",
 		],
 		images: {
-			"Kanye West": "/images/kanye.jpg",
-			"Tyler the Creator": "/images/tyler.jpg",
-			"Ronnie Fieg": "/images/ronnie.jpg",
-			"Playboi Carti": "/images/carti.jpg",
-			"Justin Bieber": "/images/justin.jpg",
-			"Virgil Abloh": "/images/virgil.jpg",
+			"Kanye West": "/images/Kanye_West.webp",
+			"Tyler the Creator": "/images/Kanye_West.webp",
+			"Ronnie Fieg": "/images/Kanye_West.webp",
+			"Playboi Carti": "/images/Kanye_West.webp",
+			"Justin Bieber": "/images/Kanye_West.webp",
+			"Virgil Abloh": "/images/Kanye_West.webp",
 		},
 	},
 	{
 		id: "q5",
 		text: "Which brands do you like?",
-		type: "multiple_choice",
+		type: "image_multiple_choice",
 		note: "Insert logos from BLACKMRKT page",
 		options: [
 			"Nike",
@@ -150,7 +150,7 @@ const questions = [
 	{
 		id: "q10",
 		text: "Which colors do you want to avoid?",
-		type: "multiple_choice",
+		type: "color_multiple_choice",
 		options: [
 			"Black",
 			"White",
@@ -346,7 +346,7 @@ const SingleChoiceQuestion = ({
 	);
 };
 
-const MultipleChoiceQuestion = <T extends string>({
+const ColorMultipleChoiceQuestion = <T extends string>({
 	options,
 	value,
 	onChange,
@@ -376,8 +376,8 @@ const MultipleChoiceQuestion = <T extends string>({
 								className="left-[-999em] absolute"
 							/>
 							<label
-								className={`grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-[64rem] 
-                text-4xl px-4 py-3 rounded-md 
+								className={`grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-[64rem]
+                text-4xl px-4 py-3 rounded-md
                 ${
 									isSelected
 										? "shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white"
@@ -429,6 +429,92 @@ const MultipleChoiceQuestion = <T extends string>({
 									)}
 								</span>
 							</label>
+						</div>
+					);
+				})}
+			</div>
+			<button
+				onClick={onNext}
+				className="max-w-fit mt-8 px-6 py-3 bg-white text-black rounded-md hover:bg-gray-200 transition-colors text-xl"
+			>
+				Next
+			</button>
+		</div>
+	);
+};
+
+const ImageMultipleChoiceQuestion = <T extends string>({
+	options,
+	value,
+	onChange,
+	onNext,
+	images,
+	colorCodes,
+}: MultipleChoiceQuestionProps<T>) => {
+	const getLetter = (index: number) => String.fromCharCode(65 + index);
+	return (
+		<div className="space-y-6 flex flex-col justify-center max-w-[calc(100vw-12rem)]">
+			<div className="flex flex-row gap-10 ">
+				{options.map((option, index) => {
+					const isSelected = value.includes(option);
+					return (
+						<div key={option} className="flex">
+							<div
+								className={`cursor-pointer relative ${isSelected ? "outline rounded-lg" : ""}`}
+								onClick={() => {
+									const newValue = !isSelected
+										? [...value, option]
+										: value.filter((v) => v !== option);
+									onChange(newValue);
+								}}
+							>
+								{images?.[option] && (
+									<img
+										src={images[option]}
+										alt={option}
+										className="contrast-75 w-full h-full object-contain object-bottom align-bottom rounded-lg drop-shadow-md"
+									/>
+								)}
+								<input
+									type="checkbox"
+									id={option}
+									checked={isSelected}
+									className="left-[-999em] absolute"
+									readOnly
+								/>
+								<div
+									className="absolute bottom-0 pb-2 pl-2 w-full h-[28%] bg-zinc-900/75 blur-2xl rounded-b-lg"
+									htmlFor={option}
+								/>
+								<label className="text-white drop-shadow-2xl absolute bottom-0 pb-2 pl-2 text-5xl font-extrabold w-full rounded-b-lg select-none">
+									{option}
+								</label>
+								<div className="absolute w-7 h-8 bg-[var(--bm-white)] z-3 top-[-1px] right-6">
+									<svg
+										className="w-full h-full"
+										viewBox="0 0 15 15"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<circle
+											r="5"
+											cy="7.5"
+											cx="7.5"
+											stroke="#6D6D6D"
+											strokeWidth="0.5"
+										/>
+										<title>Checkbox</title>
+										{isSelected && (
+											<path
+												d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
+												fill="black"
+												fillRule="evenodd"
+												clipRule="evenodd"
+											/>
+										)}
+									</svg>
+								</div>
+							</div>
 						</div>
 					);
 				})}
@@ -588,7 +674,6 @@ export default function Survey() {
 		const currentQuestionId = questions[currentQuestion].id;
 		const currentValue = responses[currentQuestionId];
 		const currentQuestionType = questions[currentQuestion].type;
-
 		if (currentQuestionType !== "single_choice") {
 			if (!validateResponse(currentValue, currentQuestionType)) {
 				alert("Please provide a response before continuing");
@@ -653,11 +738,30 @@ export default function Survey() {
 					/>
 				);
 			}
-			case "multiple_choice": {
+			case "image_multiple_choice": {
 				const multiValue =
 					(value as unknown as ResponseTypes["multiple_choice"]) || [];
 				return (
-					<MultipleChoiceQuestion
+					<ImageMultipleChoiceQuestion
+						options={question.options ?? []}
+						value={multiValue}
+						onChange={(newValue) =>
+							setResponses((prev) => ({
+								...prev,
+								[question.id]: newValue as unknown as ResponseType,
+							}))
+						}
+						onNext={handleNext}
+						images={question.images}
+						colorCodes={question.colorCodes}
+					/>
+				);
+			}
+			case "color_multiple_choice": {
+				const multiValue =
+					(value as unknown as ResponseTypes["multiple_choice"]) || [];
+				return (
+					<ColorMultipleChoiceQuestion
 						options={question.options ?? []}
 						value={multiValue}
 						onChange={(newValue) =>
