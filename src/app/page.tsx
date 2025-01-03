@@ -7,15 +7,20 @@ import {
 	SingleChoiceQuestion,
 	ImageMultipleChoiceQuestion,
 	ColorMultipleChoiceQuestion,
+	TextMultipleChoiceQuestion,
 	EmailQuestion,
 	NumberQuestion,
+	HeightQuestion,
 } from "./questions";
 
 import { questions } from "./questions_json";
+import type { ResponseTypes } from "@/utils/types";
+import ScrambleText from "./ScrambleText";
 
 export default function Survey() {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [responses, setResponses] = useState<Record<string, ResponseType>>({});
+	const [isScrambling, setIsScrambling] = useState(false);
 	const [scope, animate] = useAnimate();
 
 	useEffect(() => {
@@ -133,6 +138,7 @@ export default function Survey() {
 		}
 
 		if (currentQuestion < questions.length - 1) {
+			setIsScrambling(true);
 			animate([
 				["header", { height: "57.1428vh" }],
 				["header", { height: "28.571vh" }, { at: 1 }],
@@ -146,6 +152,10 @@ export default function Survey() {
 			const nextQuestion = currentQuestion + 1;
 			setTimeout(() => {
 				setCurrentQuestion(nextQuestion);
+				setIsScrambling(true);
+				setTimeout(() => {
+					setIsScrambling(false);
+				}, 300);
 			}, 1000);
 
 			updateURL(nextQuestion);
@@ -192,6 +202,24 @@ export default function Survey() {
 					/>
 				);
 			}
+			case "height": {
+				const numberValue = value as ResponseTypes["number"];
+				return (
+					<HeightQuestion
+						value={numberValue}
+						onChange={(newValue) =>
+							setResponses((prev) => ({
+								...prev,
+								[question.id]: newValue as ResponseType,
+							}))
+						}
+						onNext={handleNext}
+						placeholder={question.placeholder}
+						validation={question.validation}
+						unit={question.unit}
+					/>
+				);
+			}
 			case "image_multiple_choice": {
 				const multiValue =
 					(value as unknown as ResponseTypes["multiple_choice"]) || [];
@@ -216,6 +244,25 @@ export default function Survey() {
 					(value as unknown as ResponseTypes["multiple_choice"]) || [];
 				return (
 					<ColorMultipleChoiceQuestion
+						options={question.options ?? []}
+						value={multiValue}
+						onChange={(newValue) =>
+							setResponses((prev) => ({
+								...prev,
+								[question.id]: newValue as unknown as ResponseType,
+							}))
+						}
+						onNext={handleNext}
+						images={question.images}
+						colorCodes={question.colorCodes}
+					/>
+				);
+			}
+			case "text_multiple_choice": {
+				const multiValue =
+					(value as unknown as ResponseTypes["multiple_choice"]) || [];
+				return (
+					<TextMultipleChoiceQuestion
 						options={question.options ?? []}
 						value={multiValue}
 						onChange={(newValue) =>
@@ -277,8 +324,10 @@ export default function Survey() {
 					initial={{ height: "28.571vh" }}
 					className="fixed top-0 w-full overlay-drop-shadow bg-[var(--bm-black)] z-20 border-b-[1px] border-[var(--bm-white)]"
 				>
-					<h1 className="absolute top-10 left-24 max-w-7xl font-archivo md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[var(--bm-white)]">
-						<Typewrite question={questions[currentQuestion].text} />
+					<h1 className="absolute top-10 left-6 md:left-24 max-w-[90vw] lg:max-w-7xl font-archivo text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[var(--bm-white)]">
+						<ScrambleText isAnimating={isScrambling}>
+							{questions[currentQuestion].text}
+						</ScrambleText>
 					</h1>
 				</motion.header>
 				<motion.footer
@@ -286,7 +335,7 @@ export default function Survey() {
 					className="overlay-drop-shadow fixed bottom-0 w-full bg-[var(--bm-black)] z-20 border-t-[1px] border-[var(--bm-white)]"
 				/>
 			</section>
-			<section className="w-screen h-screen grid grid-rows-[2fr_4fr_1fr] font-geist font-extralight pl-24">
+			<section className="w-screen h-screen grid grid-rows-[2fr_4fr_1fr] font-geist font-extralight px-4 lg:pl-24">
 				<div />
 				{renderQuestion()}
 				<div />
@@ -294,64 +343,3 @@ export default function Survey() {
 		</main>
 	);
 }
-
-const LETTER_DELAY = 0.0195;
-const BOX_FADE_DURATION = 0.05;
-const FADE_DELAY = 5;
-const MAIN_FADE_DURATION = 0.25;
-const SWAP_DELAY_IN_MS = 5500;
-
-const Typewrite = ({ question }: TypewriterProps) => {
-	// Use a local state to trigger re-animation
-	const [key, setKey] = useState(0);
-
-	// Memoize the letters array to prevent unnecessary re-renders
-	const letters = useMemo(() => question.split(""), [question]);
-
-	// Reset animation when question changes
-	useEffect(() => {
-		setKey((prevKey) => prevKey + 1);
-	}, [question]);
-
-	return (
-		<p className="">
-			<span className="">
-				{letters.map((letter, index) => (
-					<motion.span
-						initial={{ opacity: 1 }}
-						transition={{
-							delay: FADE_DELAY,
-							duration: MAIN_FADE_DURATION,
-							ease: "easeInOut",
-						}}
-						key={`${key}-${index}`}
-						className="relative"
-					>
-						<motion.span
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{
-								delay: index * LETTER_DELAY,
-								duration: 0,
-							}}
-						>
-							{letter}
-						</motion.span>
-
-						<motion.span
-							initial={{ opacity: 0 }}
-							animate={{ opacity: [0, 1, 0] }}
-							transition={{
-								delay: index * LETTER_DELAY,
-								times: [0, 0.1, 1],
-								duration: BOX_FADE_DURATION,
-								ease: "easeInOut",
-							}}
-							className="absolute bottom-[3px] left-[1px] right-0 top-[3px] bg-[var(--bm-white)]"
-						/>
-					</motion.span>
-				))}
-			</span>
-		</p>
-	);
-};

@@ -27,7 +27,7 @@ type ColorCodes = {
 	Pinks: string;
 	Green: string;
 	Red: string;
-	"Olive Green": string;
+	Olive: string;
 	Yellow: string;
 };
 

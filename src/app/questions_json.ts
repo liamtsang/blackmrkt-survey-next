@@ -76,23 +76,21 @@ export const questions = [
 	{
 		id: "q6",
 		text: "How tall are you?",
-		type: "number",
-		unit: "cm",
-		placeholder: "Enter your height in cm",
+		type: "height",
 		validation: {
-			min: 100,
-			max: 250,
+			min: 1,
+			max: 11,
 		},
 	},
 	{
 		id: "q7",
 		text: "What's your weight?",
 		type: "number",
-		unit: "kg",
-		placeholder: "Enter your weight in kg",
+		unit: "lbs",
+		placeholder: "Enter your weight in lbs",
 		validation: {
 			min: 30,
-			max: 200,
+			max: 1000,
 		},
 	},
 	{
@@ -145,7 +143,7 @@ export const questions = [
 			"Pinks",
 			"Green",
 			"Red",
-			"Olive Green",
+			"Olive",
 			"Yellow",
 		],
 		colorCodes: {
@@ -157,7 +155,7 @@ export const questions = [
 			Pinks: "#FFC0CB",
 			Green: "#008000",
 			Red: "#FF0000",
-			"Olive Green": "#808000",
+			Olive: "#808000",
 			Yellow: "#FFFF00",
 		},
 	},
@@ -170,7 +168,7 @@ export const questions = [
 	{
 		id: "q12",
 		text: "Do you want your stylist to avoid any of these?",
-		type: "multiple_choice",
+		type: "text_multiple_choice",
 		options: [
 			"Polos",
 			"Button Downs",
