@@ -138,7 +138,6 @@ export default function Survey() {
 		}
 
 		if (currentQuestion < questions.length - 1) {
-			setIsScrambling(true);
 			animate([
 				["header", { height: "57.1428vh" }],
 				["header", { height: "28.571vh" }, { at: 1 }],
@@ -151,12 +150,11 @@ export default function Survey() {
 
 			const nextQuestion = currentQuestion + 1;
 			setTimeout(() => {
-				setCurrentQuestion(nextQuestion);
 				setIsScrambling(true);
-				setTimeout(() => {
-					setIsScrambling(false);
-				}, 300);
-			}, 1000);
+			}, 250);
+			setTimeout(() => {
+				setCurrentQuestion(nextQuestion);
+			}, 500);
 
 			updateURL(nextQuestion);
 		} else {

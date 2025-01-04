@@ -58,7 +58,8 @@ export const NumberQuestion = ({
 				placeholder={placeholder}
 				min={validation?.min}
 				max={validation?.max}
-				className="w-80 p-2 border rounded text-[var(--bm-white)] bg-transparent"
+				className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
+              text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
 			/>
 			{unit && <span className="text-white">{unit}</span>}
 		</div>
@@ -113,7 +114,7 @@ export const HeightQuestion = ({
 						// placeholder="5"
 						min={validation?.min || 0}
 						max={validation?.max || 9}
-						className="w-20 p-2 border rounded text-[var(--bm-white)] bg-transparent"
+						className="grid min-w-1/2 lg:min-w-[8rem] bg-transparent text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
 					/>
 					<span className="text-white">ft</span>
 				</div>
@@ -125,7 +126,7 @@ export const HeightQuestion = ({
 						// placeholder="7"
 						min={0}
 						max={11}
-						className="w-20 p-2 border rounded text-[var(--bm-white)] bg-transparent"
+						className="grid min-w-1/2 lg:min-w-[8rem] bg-transparent text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
 					/>
 					<span className="text-white">in</span>
 				</div>

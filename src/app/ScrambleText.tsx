@@ -2,43 +2,34 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const CYCLES_PER_LETTER = 5;
 const SHUFFLE_TIME = 50;
 
 type Props = {
 	children: string;
 	isAnimating?: boolean;
-	onAnimationComplete?: () => void;
 };
 
-const ScrambleText: React.FC<Props> = ({
-	children,
-	isAnimating = false,
-	onAnimationComplete,
-}) => {
+const ScrambleText: React.FC<Props> = ({ children, isAnimating = false }) => {
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 	const [text, setText] = useState(children);
 	const words = children.match(/\S+|\s+/g) || [];
-	const [isHovering, setIsHovering] = useState(false);
 
-	const shiftWord = (word: string, shift: number) => {
+	const shiftWord = (word: string, offset: number) => {
 		if (word.trim() === "") return word;
-
 		const chars = word.split("");
+
 		// Create a shifted version of the array
 		const shiftedChars = [
-			...chars.slice(shift % chars.length),
-			...chars.slice(0, shift % chars.length),
+			...chars.slice(offset % chars.length),
+			...chars.slice(0, offset % chars.length),
 		];
 
 		return shiftedChars.join("");
 	};
 
 	const scramble = () => {
-		let cycles = 0;
-		const maxCycles = Math.max(
-			...words.map((word) => word.trim().length * CYCLES_PER_LETTER),
-		);
+		let shifts = 5; // Start with an offset of 5 positions
+		const maxShifts = shifts + Math.max(...words.map((word) => word.length));
 
 		stopScramble();
 
@@ -46,21 +37,15 @@ const ScrambleText: React.FC<Props> = ({
 			const scrambled = words
 				.map((word) => {
 					if (word.trim() === "") return word;
-					const wordLength = word.length;
-					if (cycles / CYCLES_PER_LETTER >= wordLength) {
-						return word;
-					}
-					// Shift based on current cycle
-					return shiftWord(word, cycles);
+					return shiftWord(word, shifts);
 				})
 				.join("");
 
 			setText(scrambled);
-			cycles++;
+			shifts--;
 
-			if (cycles >= maxCycles) {
+			if (shifts < 0) {
 				stopScramble();
-				onAnimationComplete?.();
 			}
 		}, SHUFFLE_TIME);
 	};
@@ -74,12 +59,16 @@ const ScrambleText: React.FC<Props> = ({
 	};
 
 	useEffect(() => {
-		if (isAnimating && !isHovering) {
+		if (isAnimating) {
 			scramble();
-		} else if (!isAnimating && !isHovering) {
+		} else if (!isAnimating) {
 			stopScramble();
 		}
 	}, [isAnimating, children]);
+
+	useEffect(() => {
+		scramble();
+	}, [children]);
 
 	useEffect(() => {
 		return () => {
@@ -90,23 +79,7 @@ const ScrambleText: React.FC<Props> = ({
 	}, []);
 
 	return (
-		<motion.div
-			whileHover={{
-				scale: 1.025,
-			}}
-			whileTap={{
-				scale: 0.975,
-			}}
-			onMouseEnter={() => {
-				setIsHovering(true);
-				scramble();
-			}}
-			onMouseLeave={() => {
-				setIsHovering(false);
-				stopScramble();
-			}}
-			className="relative overflow-hidden"
-		>
+		<motion.div className="relative overflow-hidden">
 			<div className="relative z-10 flex items-center gap-2">
 				<span>{text}</span>
 			</div>
