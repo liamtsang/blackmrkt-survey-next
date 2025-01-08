@@ -8,7 +8,12 @@ import type {
 
 import { useEffect, useState } from "react";
 
-const NextButton = ({ onClickFunction, disabled = false }) => {
+type NextButtonProps = {
+	onClickFunction: () => void;
+	disabled?: boolean;
+};
+
+const NextButton = ({ onClickFunction, disabled = false }: NextButtonProps) => {
 	return (
 		<button
 			onClick={onClickFunction}
@@ -87,18 +92,21 @@ export const HeightQuestion = ({
 		}
 	}, [value]);
 
-	const handleFeetChange = (newFeet) => {
+	const handleFeetChange = (newFeet: string) => {
 		setFeet(newFeet);
 		if (newFeet && inches) {
 			onChange(`${newFeet}'${inches}"`);
 		}
 	};
 
-	const handleInchesChange = (newInches) => {
+	const handleInchesChange = (newInches: string) => {
 		// Ensure inches are between 0-11
-		const validInches = Math.min(Math.max(0, parseInt(newInches) || 0), 11);
+		const validInches = Math.min(
+			Math.max(0, Number.parseInt(newInches) || 0),
+			11,
+		);
 		setInches(validInches.toString());
-		if (feet && validInches !== "") {
+		if (feet) {
 			onChange(`${feet}'${validInches}"`);
 		}
 	};
@@ -338,11 +346,11 @@ export const ImageMultipleChoiceQuestion = <T extends string>({
 									className="left-[-999em] absolute"
 									readOnly
 								/>
-								<div
-									className="absolute bottom-0 pb-2 pl-2 w-full h-[28%] bg-zinc-900/75 blur-2xl rounded-b-lg"
+								<div className="absolute bottom-0 pb-2 pl-2 w-full h-[28%] bg-zinc-900/75 blur-2xl rounded-b-lg" />
+								<label
 									htmlFor={option}
-								/>
-								<label className="text-white drop-shadow-2xl absolute bottom-0 pb-2 pl-2 text-2xl leading-tight lg:leading-none lg:text-5xl font-extrabold w-full rounded-b-lg select-none">
+									className="text-white drop-shadow-2xl absolute bottom-0 pb-2 pl-2 text-2xl leading-tight lg:leading-none lg:text-5xl font-extrabold w-full rounded-b-lg select-none"
+								>
 									{option}
 								</label>
 								<div className="absolute w-7 h-8 bg-[var(--bm-white)] z-3 top-[-1px] right-6">

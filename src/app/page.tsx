@@ -12,10 +12,11 @@ import {
 	NumberQuestion,
 	HeightQuestion,
 } from "./questions";
-
-import { questions } from "./questions_json";
-import type { ResponseTypes } from "@/utils/types";
 import ScrambleText from "./ScrambleText";
+import { questions } from "./questions_json";
+import { addToDB } from "./actions";
+
+import type { ResponseTypes, SizeQuestionType } from "@/utils/types";
 
 export default function Survey() {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -96,11 +97,13 @@ export default function Survey() {
 
 	const handleSubmit = () => {
 		console.log("Final responses:", responses);
-		if (confirm("Submit survey?")) {
-			localStorage.removeItem("blackmrkt-survey-responses");
-			localStorage.removeItem("blackmrkt-survey-current");
-			alert("Thank you for completing the survey!");
-		}
+		console.log(typeof responses);
+		addToDB(responses);
+		// if (confirm("Submit survey?")) {
+		// 	localStorage.removeItem("blackmrkt-survey-responses");
+		// 	localStorage.removeItem("blackmrkt-survey-current");
+		// 	alert("Thank you for completing the survey!");
+		// }
 	};
 
 	const validateResponse = (value: unknown, questionType: string): boolean => {
@@ -149,6 +152,32 @@ export default function Survey() {
 			]);
 
 			const nextQuestion = currentQuestion + 1;
+			setTimeout(() => {
+				setIsScrambling(true);
+			}, 250);
+			setTimeout(() => {
+				setCurrentQuestion(nextQuestion);
+			}, 500);
+
+			updateURL(nextQuestion);
+		} else {
+			handleSubmit();
+		}
+	};
+
+	const handleBack = () => {
+		if (currentQuestion !== 0) {
+			animate([
+				["header", { height: "57.1428vh" }],
+				["header", { height: "28.571vh" }, { at: 1 }],
+			]);
+
+			animate([
+				["footer", { height: "42.85714vh" }],
+				["footer", { height: "14.285vh" }, { at: 1 }],
+			]);
+
+			const nextQuestion = currentQuestion - 1;
 			setTimeout(() => {
 				setIsScrambling(true);
 			}, 250);
@@ -331,7 +360,15 @@ export default function Survey() {
 				<motion.footer
 					initial={{ height: "14.285vh" }}
 					className="overlay-drop-shadow fixed bottom-0 w-full bg-[var(--bm-black)] z-20 border-t-[1px] border-[var(--bm-white)]"
-				/>
+				>
+					<button
+						className="absolute top-8 left-6 md:left-24 text-4xl"
+						type="button"
+						onClick={handleBack}
+					>
+						🡨 Back
+					</button>
+				</motion.footer>
 			</section>
 			<section className="w-screen h-screen grid grid-rows-[2fr_4fr_1fr] font-geist font-extralight px-4 lg:pl-24">
 				<div />

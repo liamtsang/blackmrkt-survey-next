@@ -7,3 +7,12 @@ compatibility_flags = ["nodejs_compat"]
 
 # Assets used for files and cache priming.
 assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "blackmrkt-survey-results"
+database_id = "3075b671-6400-40f8-93a0-ffc270aec848"
