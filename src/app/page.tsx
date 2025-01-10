@@ -129,6 +129,51 @@ export default function Survey() {
 		}
 	};
 
+	const animateTransition = () => {
+		animate([
+			["header", { height: "57.1428vh" }, { ease: "easeIn" }],
+			["header", { height: "28.571vh" }, { at: 1 }],
+		]);
+
+		animate([
+			["h1", { opacity: 0 }, { ease: "easeOut" }],
+			["h1", { opacity: 1 }, { at: 0.75, ease: "easeInOut" }],
+		]);
+		setTimeout(() => {
+			document.documentElement.style.setProperty(
+				"--border-color",
+				"var(--scan-gradient)",
+			);
+		}, 250);
+		setTimeout(() => {
+			document.documentElement.style.setProperty("--border-color", "black");
+		}, 1000);
+
+		animate([
+			[
+				"#header-bg",
+				{ y: "-60%" },
+				{ at: 0.25, duration: 1, ease: "easeInOut" },
+			],
+			["#header-bg", { y: "70%" }, { at: 1.5, duration: 0.00001 }],
+		]);
+		animate([
+			[
+				"#footer-bg",
+				{ y: "60%" },
+				{ at: 0.25, duration: 1, ease: "easeInOut" },
+			],
+			["#footer-bg", { y: "-70%" }, { at: 1.5, duration: 0.00001 }],
+		]);
+		animate([
+			["footer", { height: "42.85714vh" }, { ease: "easeIn" }],
+			["footer", { height: "14.285vh" }, { at: 1 }],
+		]);
+		setTimeout(() => {
+			setIsScrambling(true);
+		}, 4000);
+	};
+
 	const handleNext = () => {
 		const currentQuestionId = questions[currentQuestion].id;
 		const currentValue = responses[currentQuestionId];
@@ -141,23 +186,12 @@ export default function Survey() {
 		}
 
 		if (currentQuestion < questions.length - 1) {
-			animate([
-				["header", { height: "57.1428vh" }],
-				["header", { height: "28.571vh" }, { at: 1 }],
-			]);
-
-			animate([
-				["footer", { height: "42.85714vh" }],
-				["footer", { height: "14.285vh" }, { at: 1 }],
-			]);
+			animateTransition();
 
 			const nextQuestion = currentQuestion + 1;
 			setTimeout(() => {
-				setIsScrambling(true);
-			}, 250);
-			setTimeout(() => {
 				setCurrentQuestion(nextQuestion);
-			}, 500);
+			}, 750);
 
 			updateURL(nextQuestion);
 		} else {
@@ -167,27 +201,14 @@ export default function Survey() {
 
 	const handleBack = () => {
 		if (currentQuestion !== 0) {
-			animate([
-				["header", { height: "57.1428vh" }],
-				["header", { height: "28.571vh" }, { at: 1 }],
-			]);
-
-			animate([
-				["footer", { height: "42.85714vh" }],
-				["footer", { height: "14.285vh" }, { at: 1 }],
-			]);
+			animateTransition();
 
 			const nextQuestion = currentQuestion - 1;
 			setTimeout(() => {
-				setIsScrambling(true);
-			}, 250);
-			setTimeout(() => {
 				setCurrentQuestion(nextQuestion);
-			}, 500);
+			}, 750);
 
 			updateURL(nextQuestion);
-		} else {
-			handleSubmit();
 		}
 	};
 
@@ -348,19 +369,44 @@ export default function Survey() {
 		<main>
 			<section ref={scope} className="">
 				<motion.header
-					initial={{ height: "28.571vh" }}
-					className="fixed top-0 w-full overlay-drop-shadow bg-[var(--bm-black)] z-20 border-b-[1px] border-[var(--bm-white)]"
+					initial={{
+						height: "28.571vh",
+					}}
+					className="bg-[var(--bm-black)]  fixed top-0 w-full overlay-drop-shadow z-20 iridescent-border"
 				>
-					<h1 className="absolute top-10 left-6 md:left-24 max-w-[90vw] lg:max-w-7xl font-archivo text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[var(--bm-white)]">
+					<div className="overflow-hidden h-full">
+						<motion.div
+							id="header-bg"
+							className="h-full"
+							initial={{
+								height: "57.1428vh",
+								background: "var(--scan-gradient)",
+								y: "50%",
+							}}
+						/>
+					</div>
+					<motion.h1
+						initial={{ opacity: 1 }}
+						className="absolute top-[50%] translate-y-[-50%] left-6 md:left-24 max-w-[90vw] lg:max-w-7xl font-archivo text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tighter text-[var(--bm-white)]"
+					>
 						<ScrambleText isAnimating={isScrambling}>
 							{questions[currentQuestion].text}
 						</ScrambleText>
-					</h1>
+					</motion.h1>
 				</motion.header>
 				<motion.footer
 					initial={{ height: "14.285vh" }}
-					className="overlay-drop-shadow fixed bottom-0 w-full bg-[var(--bm-black)] z-20 border-t-[1px] border-[var(--bm-white)]"
+					className="overflow-hidden overlay-drop-shadow fixed bottom-0 w-full bg-[var(--bm-black)] z-20 "
 				>
+					<motion.div
+						id="footer-bg"
+						className="h-full"
+						initial={{
+							height: "57.1428vh",
+							background: "var(--scan-gradient)",
+							y: "-100%",
+						}}
+					/>
 					<button
 						className="absolute top-8 left-6 md:left-24 text-4xl"
 						type="button"

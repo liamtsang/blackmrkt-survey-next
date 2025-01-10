@@ -22,3 +22,13 @@ export async function addToDB(survey: Record<string, ResponseType>) {
 
 	console.log(result);
 }
+
+export async function selectTopFromDB(x: number) {
+	const db = await buildDB();
+	const stmt = db.prepare(`SELECT * FROM survey_results LIMIT ?`);
+
+	const result = await stmt.bind(x).run();
+
+	console.log(result);
+	return result;
+}

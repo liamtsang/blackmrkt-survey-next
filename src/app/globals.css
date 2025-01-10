@@ -5,7 +5,177 @@
 :root {
   --bm-white: #bebebe;
   --bm-black: #0a0a0a;
+  --transparent: rgba(255, 255, 255, 0);
+  /* --color1: #92f2f2; */
+  /* --color2: #d6cff1; */
+  /* --color3: #c4f2e5; */
+  /* --color4: #a8d0f0; */
+  /* --color5: #c2dcf2; */
+  /* --color6: #eed5f2; */
+  /* --color7: #9cb9fc; */
+  --color1: #478888;
+  --color2: #6f5fac;
+  --color3: #1ca881;
+  --color4: #4a779a;
+  --color5: #81a6c6;
+  --color6: #bb75c6;
+  --color7: #284a9a;
+  --scan-gradient: radial-gradient(
+      at 30% -5%,
+      var(--color1),
+      var(--color2),
+      var(--transparent) 25%
+    ),
+    radial-gradient(at 50% 70%, var(--color3), var(--transparent) 30%),
+    radial-gradient(at 70% 0%, var(--color2), var(--transparent) 20%),
+    linear-gradient(
+      75deg,
+      var(--color1) 5%,
+      var(--transparent),
+      var(--color4),
+      var(--transparent),
+      var(--color6),
+      var(--transparent),
+      var(--color2),
+      var(--transparent),
+      var(--color3) 90%
+    ),
+    radial-gradient(at 30% 50%, var(--color1), var(--transparent) 30%),
+    radial-gradient(at 30% 50%, var(--color7), var(--transparent) 30%),
+    radial-gradient(
+      at 100% 50%,
+      var(--color1),
+      var(--color5),
+      var(--transparent) 50%
+    ),
+    linear-gradient(
+      115deg,
+      var(--color1) 5%,
+      var(--color4) 10%,
+      var(--color2),
+      var(--color6) 20%,
+      var(--color4),
+      var(--color4) 30%,
+      var(--color2),
+      var(--color5) 40%,
+      var(--color1),
+      var(--color4) 70%
+    );
+  --border-color: black;
 }
+
+.iridescent {
+  position: relative;
+  isolation: isolate; /* Creates stacking context */
+  background: var(--bg-black);
+}
+
+.iridescent::before {
+  content: "";
+  position: absolute;
+  inset: -1px; /* Adjust this value to control border width */
+  padding: 2px;
+  background: radial-gradient(
+      at 30% -5%,
+      var(--color1),
+      var(--color2),
+      var(--transparent) 25%
+    ),
+    radial-gradient(at 50% 70%, var(--color3), var(--transparent) 30%),
+    radial-gradient(at 70% 0%, var(--color2), var(--transparent) 20%),
+    linear-gradient(
+      75deg,
+      var(--color1) 5%,
+      var(--transparent),
+      var(--color4),
+      var(--transparent),
+      var(--color6),
+      var(--transparent),
+      var(--color2),
+      var(--transparent),
+      var(--color3) 90%
+    ),
+    radial-gradient(at 30% 50%, var(--color1), var(--transparent) 30%),
+    radial-gradient(at 30% 50%, var(--color7), var(--transparent) 30%),
+    radial-gradient(
+      at 100% 50%,
+      var(--color1),
+      var(--color5),
+      var(--transparent) 50%
+    ),
+    linear-gradient(
+      115deg,
+      var(--color1) 5%,
+      var(--color4) 10%,
+      var(--color2),
+      var(--color6) 20%,
+      var(--color4),
+      var(--color4) 30%,
+      var(--color2),
+      var(--color5) 40%,
+      var(--color1),
+      var(--color4) 70%
+    );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+  border-radius: inherit; /* Inherits border-radius if parent has it */
+
+  /* Animation properties */
+  background-size: 200% 200%;
+  animation: gradient 5s linear infinite;
+}
+.iridescent-border {
+  isolation: isolate; /* Creates stacking context */
+  background: var(--bm-black);
+}
+
+.iridescent-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px; /* Adjust this value to control border width */
+  padding-bottom: 2px;
+  background: var(--border-color);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+  border-radius: inherit; /* Inherits border-radius if parent has it */
+
+  animation: gradient 5s linear infinite;
+}
+
+#header-bg,
+#footer-bg {
+  mask-composite: intersect;
+  mask-image: linear-gradient(
+      transparent 40%,
+      rgba(0, 0, 0, 0.25) 45%,
+      #fff 50%,
+      rgba(0, 0, 0, 0.25) 55%,
+      transparent 60%
+    ),
+    url("/images/grid_mask.png");
+  mask-size: 10%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
 html,
 body {
   margin: 0;
@@ -32,7 +202,7 @@ body {
   font-family: Geist;
 }
 .overlay-drop-shadow {
-  display: block;
+  /* display: block; */
   box-shadow:
     0px 3px 11px -7px rgba(0, 0, 0, 0.25),
     0px 0px 1px #bebebe,

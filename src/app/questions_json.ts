@@ -86,8 +86,7 @@ export const questions = [
 		id: "q7",
 		text: "What's your weight?",
 		type: "number",
-		unit: "lbs",
-		placeholder: "Enter your weight in lbs",
+		placeholder: "Weight in lbs",
 		validation: {
 			min: 30,
 			max: 1000,
@@ -189,7 +188,7 @@ export const questions = [
 		text: "What's your monthly budget for clothing?",
 		type: "number",
 		unit: "$",
-		placeholder: "Enter your monthly budget",
+		placeholder: "Monthly budget",
 		validation: {
 			min: 50,
 			max: 10000,

@@ -55,18 +55,25 @@ export const NumberQuestion = ({
 	unit,
 }: NumberQuestionProps) => (
 	<div className="pt-16">
-		<div className="flex items-center gap-2">
-			<input
-				type="number"
-				value={value || ""}
-				onChange={(e) => onChange(e.target.value)}
-				placeholder={placeholder}
-				min={validation?.min}
-				max={validation?.max}
-				className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
-              text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
-			/>
-			{unit && <span className="text-white">{unit}</span>}
+		<div className="flex flex-col gap-2">
+			<label htmlFor={placeholder}>{placeholder}</label>
+			<span>
+				{unit && (
+					<span className="text-white absolute py-3 px-2 text-lg lg:text-4xl">
+						{unit}
+					</span>
+				)}
+				<input
+					id={placeholder}
+					type="number"
+					value={value || ""}
+					onChange={(e) => onChange(e.target.value)}
+					min={validation?.min}
+					max={validation?.max}
+					className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
+              text-lg lg:text-4xl px-6 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
+				/>
+			</span>
 		</div>
 		<NextButton onClickFunction={onNext} disabled={!value} />
 	</div>
@@ -173,10 +180,10 @@ export const SingleChoiceQuestion = ({
 						/>
 						<label
 							className={`grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] 
-              text-lg lg:text-4xl px-2 py-2 lg:px-4 lg:py-3 rounded-md 
+              text-lg lg:text-4xl px-2 py-2 lg:px-4 lg:py-3 rounded-md relative 
               ${
 								isSelected
-									? "shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white"
+									? "text-white iridescent bg-[var(--bm-black)]"
 									: "shadow-[0px_0px_2px_1px_rgba(255,255,255,0.5)] hover:shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] hover:text-white"
 							} cursor-pointer`}
 							htmlFor={option}
