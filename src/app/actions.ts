@@ -32,3 +32,13 @@ export async function selectTopFromDB(x: number) {
 	console.log(result);
 	return result;
 }
+
+export async function selectUUIDFromDB(uuid: string) {
+	const db = await buildDB();
+	const stmt = db.prepare(`SELECT * FROM survey_results WHERE id = ?`);
+
+	const result = await stmt.bind(uuid).run();
+
+	console.log(result);
+	return result;
+}
