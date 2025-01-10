@@ -146,7 +146,10 @@ export default function Survey() {
 			);
 		}, 250);
 		setTimeout(() => {
-			document.documentElement.style.setProperty("--border-color", "black");
+			document.documentElement.style.setProperty(
+				"--border-color",
+				"var(--bm-black)",
+			);
 		}, 1000);
 
 		animate([

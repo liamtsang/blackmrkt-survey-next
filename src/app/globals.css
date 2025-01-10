@@ -137,7 +137,7 @@
   content: "";
   position: absolute;
   inset: -1px; /* Adjust this value to control border width */
-  padding-bottom: 2px;
+  padding-bottom: 4px;
   background: var(--border-color);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,

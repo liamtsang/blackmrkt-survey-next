@@ -14,8 +14,22 @@ type NextButtonProps = {
 };
 
 const NextButton = ({ onClickFunction, disabled = false }: NextButtonProps) => {
+	useEffect(() => {
+		const handleGlobalKeyPress = (event: KeyboardEvent) => {
+			if (event.key === "Enter" && !disabled) {
+				event.preventDefault();
+				onClickFunction();
+			}
+		};
+		document.addEventListener("keydown", handleGlobalKeyPress);
+		return () => {
+			document.removeEventListener("keydown", handleGlobalKeyPress);
+		};
+	}, [onClickFunction, disabled]);
+
 	return (
 		<button
+			type="submit"
 			onClick={onClickFunction}
 			disabled={disabled}
 			className="mt-4 px-6 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-colors w-fit disabled:opacity-25"
@@ -32,6 +46,7 @@ export const EmailQuestion = ({
 }: EmailQuestionProps) => (
 	<div className="pt-16">
 		<input
+			autoFocus
 			type="email"
 			value={value || ""}
 			onChange={(e) => onChange(e.target.value)}
@@ -39,7 +54,7 @@ export const EmailQuestion = ({
               text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
 			placeholder="Enter your email"
 		/>
-		<button className="mt-2 p-2 bg-blue-500 text-white rounded">
+		<button type="button" className="mt-2 p-2 bg-blue-500 text-white rounded">
 			Sign in with Google
 		</button>
 		<NextButton onClickFunction={onNext} disabled={!value} />
@@ -65,6 +80,7 @@ export const NumberQuestion = ({
 				)}
 				<input
 					id={placeholder}
+					autoFocus
 					type="number"
 					value={value || ""}
 					onChange={(e) => onChange(e.target.value)}
@@ -124,6 +140,7 @@ export const HeightQuestion = ({
 				<div className="flex items-center gap-2">
 					<input
 						type="number"
+						autoFocus
 						value={feet}
 						onChange={(e) => handleFeetChange(e.target.value)}
 						// placeholder="5"
@@ -482,8 +499,11 @@ export const SizeQuestion = ({
 	<div className="flex flex-col justify-center space-y-4">
 		{subQuestions.map(({ id, text, options }) => (
 			<div key={id} className="text-white">
-				<label className="block mb-1">{text}</label>
+				<label htmlFor="size" className="block mb-1">
+					{text}
+				</label>
 				<select
+					id="size"
 					value={value[id] || ""}
 					onChange={(e) => onChange({ ...value, [id]: e.target.value })}
 					className="w-80 p-2 border rounded text-black"
