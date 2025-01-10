@@ -25,7 +25,9 @@ export async function addToDB(survey: Record<string, ResponseType>) {
 
 export async function selectTopFromDB(x: number) {
 	const db = await buildDB();
-	const stmt = db.prepare(`SELECT * FROM survey_results LIMIT ?`);
+	const stmt = db.prepare(
+		`SELECT * FROM survey_results ORDER BY timestamp DESC LIMIT ?`,
+	);
 
 	const result = await stmt.bind(x).run();
 

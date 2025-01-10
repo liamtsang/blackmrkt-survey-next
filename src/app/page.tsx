@@ -99,11 +99,11 @@ export default function Survey() {
 		console.log("Final responses:", responses);
 		console.log(typeof responses);
 		addToDB(responses);
-		// if (confirm("Submit survey?")) {
-		// 	localStorage.removeItem("blackmrkt-survey-responses");
-		// 	localStorage.removeItem("blackmrkt-survey-current");
-		// 	alert("Thank you for completing the survey!");
-		// }
+		if (confirm("Submit survey?")) {
+			localStorage.removeItem("blackmrkt-survey-responses");
+			localStorage.removeItem("blackmrkt-survey-current");
+			alert("Thank you for completing the survey!");
+		}
 	};
 
 	const validateResponse = (value: unknown, questionType: string): boolean => {
