@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { selectTopFromDB } from "../actions";
 
 type surveyResults = {

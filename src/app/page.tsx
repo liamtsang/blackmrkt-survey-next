@@ -131,8 +131,8 @@ export default function Survey() {
 
 	const animateTransition = () => {
 		animate([
-			["header", { height: "57.1428vh" }, { ease: "easeIn" }],
-			["header", { height: "28.571vh" }, { at: 1 }],
+			["header", { height: "57.1428dvh" }, { ease: "easeIn" }],
+			["header", { height: "28.571dvh" }, { at: 1 }],
 		]);
 
 		animate([
@@ -169,8 +169,8 @@ export default function Survey() {
 			["#footer-bg", { y: "-70%" }, { at: 1.5, duration: 0.00001 }],
 		]);
 		animate([
-			["footer", { height: "42.85714vh" }, { ease: "easeIn" }],
-			["footer", { height: "14.285vh" }, { at: 1 }],
+			["footer", { height: "42.85714dvh" }, { ease: "easeIn" }],
+			["footer", { height: "14.285dvh" }, { at: 1 }],
 		]);
 		setTimeout(() => {
 			setIsScrambling(true);
@@ -373,14 +373,14 @@ export default function Survey() {
 			<section ref={scope} className="">
 				<motion.header
 					initial={{
-						height: "28.571vh",
+						height: "28.571dvh",
 					}}
-					className="bg-[var(--bm-black)]  fixed top-0 w-full overlay-drop-shadow z-20 iridescent-border"
+					className="bg-[var(--bm-black)]  fixed top-0 w-full overlay-drop-shadow z-20"
 				>
 					<div className="overflow-hidden h-full">
 						<motion.div
 							id="header-bg"
-							className="h-full"
+							className="h-dvh"
 							initial={{
 								height: "57.1428vh",
 								background: "var(--scan-gradient)",
@@ -398,7 +398,7 @@ export default function Survey() {
 					</motion.h1>
 				</motion.header>
 				<motion.footer
-					initial={{ height: "14.285vh" }}
+					initial={{ height: "14.285dvh" }}
 					className="overflow-hidden overlay-drop-shadow fixed bottom-0 w-full bg-[var(--bm-black)] z-20 "
 				>
 					<motion.div
@@ -415,11 +415,23 @@ export default function Survey() {
 						type="button"
 						onClick={handleBack}
 					>
-						🡨 Back
+						<svg
+							className="w-14"
+							width="138"
+							height="94"
+							viewBox="0 0 138 94"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M62.5 94V82H100.5C108.833 81.6667 125.5 76.2 125.5 57C125.5 37.8 108.833 32.6667 100.5 32.5H27L43 44.5L34.5 52.5L0.5 26L35 0L43 9L27 20.5H100.5C112.833 20.8333 137.5 28.6 137.5 57C137.5 85.4 112.833 93.5 100.5 94H62.5Z"
+								fill="var(--bm-white)"
+							/>
+						</svg>
 					</button>
 				</motion.footer>
 			</section>
-			<section className="w-screen h-screen grid grid-rows-[2fr_4fr_1fr] font-geist font-extralight px-4 lg:pl-24">
+			<section className="w-screen h-dvh grid grid-rows-[2fr_4fr_1fr] font-geist font-extralight px-4 lg:pl-24">
 				<div />
 				{renderQuestion()}
 				<div />

@@ -72,9 +72,9 @@ export const NumberQuestion = ({
 	<div className="pt-16">
 		<div className="flex flex-col gap-2">
 			<label htmlFor={placeholder}>{placeholder}</label>
-			<span>
+			<span className="flex items-center">
 				{unit && (
-					<span className="text-white absolute py-3 px-2 text-lg lg:text-4xl">
+					<span className="text-white absolute pl-4 text-lg lg:text-4xl">
 						{unit}
 					</span>
 				)}
@@ -87,7 +87,7 @@ export const NumberQuestion = ({
 					min={validation?.min}
 					max={validation?.max}
 					className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
-              text-lg lg:text-4xl px-6 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
+              text-lg lg:text-4xl pl-12 pr-6 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
 				/>
 			</span>
 		</div>
