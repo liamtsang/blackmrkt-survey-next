@@ -32,7 +32,7 @@ const NextButton = ({ onClickFunction, disabled = false }: NextButtonProps) => {
 			type="submit"
 			onClick={onClickFunction}
 			disabled={disabled}
-			className="mt-4 px-6 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-colors w-fit disabled:opacity-25"
+			className="text-2xl button-drop-shadow font-normal mt-4 px-6 pt-1 pb-2 text-[var(--bm-black)] rounded-lg bg-linear-to-b from-[#f5f7f7] to-[#ebf2f2] hover:bg-gray-300 transition-colors w-fit disabled:opacity-25"
 		>
 			Next
 		</button>
@@ -46,7 +46,6 @@ export const EmailQuestion = ({
 }: EmailQuestionProps) => (
 	<div className="pt-16">
 		<input
-			autoFocus
 			type="email"
 			value={value || ""}
 			onChange={(e) => onChange(e.target.value)}
@@ -80,7 +79,6 @@ export const NumberQuestion = ({
 				)}
 				<input
 					id={placeholder}
-					autoFocus
 					type="number"
 					value={value || ""}
 					onChange={(e) => onChange(e.target.value)}
@@ -140,7 +138,6 @@ export const HeightQuestion = ({
 				<div className="flex items-center gap-2">
 					<input
 						type="number"
-						autoFocus
 						value={feet}
 						onChange={(e) => handleFeetChange(e.target.value)}
 						// placeholder="5"
@@ -373,7 +370,7 @@ export const ImageMultipleChoiceQuestion = <T extends string>({
 								<div className="absolute bottom-0 pb-2 pl-2 w-full h-[28%] bg-zinc-900/75 blur-2xl rounded-b-lg" />
 								<label
 									htmlFor={option}
-									className="text-white drop-shadow-2xl absolute bottom-0 pb-2 pl-2 text-2xl leading-tight lg:leading-none lg:text-5xl font-extrabold w-full rounded-b-lg select-none"
+									className="pointer-events-none text-white drop-shadow-2xl absolute bottom-0 pb-2 pl-2 text-2xl leading-tight lg:leading-none lg:text-3xl xl:text-5xl font-extrabold w-full rounded-b-lg select-none"
 								>
 									{option}
 								</label>

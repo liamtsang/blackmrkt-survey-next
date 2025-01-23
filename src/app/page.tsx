@@ -411,7 +411,7 @@ export default function Survey() {
 						}}
 					/>
 					<button
-						className="absolute top-8 left-6 md:left-24 text-4xl"
+						className="absolute top-1/2 translate-y-[-50%] left-6 md:left-24 text-4xl"
 						type="button"
 						onClick={handleBack}
 					>
@@ -423,6 +423,7 @@ export default function Survey() {
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
 						>
+							<title>Go back</title>
 							<path
 								d="M62.5 94V82H100.5C108.833 81.6667 125.5 76.2 125.5 57C125.5 37.8 108.833 32.6667 100.5 32.5H27L43 44.5L34.5 52.5L0.5 26L35 0L43 9L27 20.5H100.5C112.833 20.8333 137.5 28.6 137.5 57C137.5 85.4 112.833 93.5 100.5 94H62.5Z"
 								fill="var(--bm-white)"
