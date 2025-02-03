@@ -32,33 +32,150 @@ const NextButton = ({ onClickFunction, disabled = false }: NextButtonProps) => {
 			type="submit"
 			onClick={onClickFunction}
 			disabled={disabled}
-			className="text-2xl button-drop-shadow font-normal mt-4 px-6 pt-1 pb-2 text-[var(--bm-black)] rounded-lg bg-linear-to-b from-[#f5f7f7] to-[#ebf2f2] hover:bg-gray-300 transition-colors w-fit disabled:opacity-25"
+			className="cursor-pointer text-2xl button-drop-shadow font-normal mt-4 px-6 pt-1 pb-2 text-[var(--bm-black)] rounded-lg bg-linear-to-b from-[#f5f7f7] to-[#ebf2f2] hover:from-gray-300 hover:to-gray-200 transition-colors w-fit disabled:opacity-25"
 		>
 			Next
 		</button>
 	);
 };
 
+interface CredentialResponse {
+	credential: string;
+	select_by: string;
+	client_id: string;
+}
+
+interface GsiButtonConfiguration {
+	theme?: "outline" | "filled_blue" | "filled_black";
+	size?: "large" | "medium" | "small";
+	text?: "signin_with" | "signup_with" | "continue_with" | "signin";
+	shape?: "rectangular" | "pill" | "circle" | "square";
+	logo_alignment?: "left" | "center";
+	width?: number;
+	local?: string;
+}
+
+interface IdentityServicesConfig {
+	client_id: string;
+	callback: (response: CredentialResponse) => void;
+	auto_select?: boolean;
+	cancel_on_tap_outside?: boolean;
+}
+
+interface Google {
+	accounts: {
+		id: {
+			initialize: (config: IdentityServicesConfig) => void;
+			renderButton: (
+				element: HTMLElement | null,
+				config: GsiButtonConfiguration,
+			) => void;
+		};
+	};
+}
+
+// Extend Window interface to include Google property
+declare global {
+	interface Window {
+		google?: Google;
+	}
+}
+
+interface DecodedCredential {
+	email: string;
+	email_verified: boolean;
+	name: string;
+	picture: string;
+	given_name: string;
+	family_name: string;
+	locale: string;
+	iat: number;
+	exp: number;
+	sub: string;
+}
+
 export const EmailQuestion = ({
 	value,
 	onChange,
 	onNext,
-}: EmailQuestionProps) => (
-	<div className="pt-16">
-		<input
-			type="email"
-			value={value || ""}
-			onChange={(e) => onChange(e.target.value)}
-			className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
-              text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
-			placeholder="Enter your email"
-		/>
-		<button type="button" className="mt-2 p-2 bg-blue-500 text-white rounded">
-			Sign in with Google
-		</button>
-		<NextButton onClickFunction={onNext} disabled={!value} />
-	</div>
-);
+}: EmailQuestionProps) => {
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const script = document.createElement("script");
+		script.src = "https://accounts.google.com/gsi/client";
+		script.async = true;
+		script.defer = true;
+		document.body.appendChild(script);
+
+		script.onload = () => {
+			window.google?.accounts.id.initialize({
+				client_id:
+					"1023000220680-0devmslp723c5fgk6kgclhglte4qc2p9.apps.googleusercontent.com",
+				callback: handleCredentialResponse,
+			});
+
+			const buttonElement = document.getElementById("google-signin-button");
+			if (buttonElement && window.google) {
+				window.google.accounts.id.renderButton(buttonElement, {
+					theme: "outline",
+					size: "large",
+					text: "signin_with",
+					shape: "rectangular",
+				});
+			}
+
+			setIsLoading(false);
+		};
+
+		return () => {
+			document.body.removeChild(script);
+		};
+	}, []);
+
+	const handleCredentialResponse = (response: CredentialResponse) => {
+		const payload = decodeJwtResponse(response.credential);
+		onChange(payload.email);
+		onNext();
+	};
+
+	const decodeJwtResponse = (token: string): DecodedCredential => {
+		const base64Url = token.split(".")[1];
+		const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+		const jsonPayload = decodeURIComponent(
+			atob(base64)
+				.split("")
+				.map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
+				.join(""),
+		);
+		return JSON.parse(jsonPayload);
+	};
+
+	return (
+		<div className="pt-16">
+			<div className="flex flex-col gap-2">
+				<label htmlFor="email" className="font-normal">
+					Email
+				</label>
+				<input
+					type="email"
+					id="email"
+					value={value || ""}
+					onChange={(e) => onChange(e.target.value)}
+					className="grid grid-cols-[auto_1fr_auto] items-center gap-4 min-w-full lg:min-w-[64rem] bg-transparent
+            text-lg lg:text-4xl px-4 py-3 rounded-md shadow-[0px_0px_1px_1px_rgba(255,255,255,1)] text-white cursor-pointer"
+				/>
+				<div className="flex items-center gap-2">
+					<div id="google-signin-button" className="mt-2" />
+					{isLoading && (
+						<span className="text-gray-400">Loading Google Sign-in...</span>
+					)}
+				</div>
+				<NextButton onClickFunction={onNext} disabled={!value} />
+			</div>
+		</div>
+	);
+};
 
 export const NumberQuestion = ({
 	value,
@@ -374,7 +491,7 @@ export const ImageMultipleChoiceQuestion = <T extends string>({
 								>
 									{option}
 								</label>
-								<div className="absolute w-7 h-8 bg-[var(--bm-white)] z-3 top-[-1px] right-6">
+								<div className="absolute w-7 h-8 bg-[var(--bm-white)] z-3 top-[-1px] right-3">
 									<svg
 										className="w-full h-full"
 										viewBox="0 0 15 15"

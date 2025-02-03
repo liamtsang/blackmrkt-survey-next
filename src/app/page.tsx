@@ -390,7 +390,7 @@ export default function Survey() {
 					</div>
 					<motion.h1
 						initial={{ opacity: 1 }}
-						className="absolute top-[50%] translate-y-[-50%] left-6 md:left-24 max-w-[90vw] lg:max-w-7xl font-archivo text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tighter text-[var(--bm-white)]"
+						className="absolute top-[50%] translate-y-[-50%] left-6 md:left-24 max-w-[90vw] lg:max-w-7xl font-archivo text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[var(--bm-white)]"
 					>
 						<ScrambleText isAnimating={isScrambling}>
 							{questions[currentQuestion].text}
@@ -411,7 +411,7 @@ export default function Survey() {
 						}}
 					/>
 					<button
-						className="absolute top-1/2 translate-y-[-50%] left-6 md:left-24 text-4xl"
+						className="absolute top-1/2 translate-y-[-50%] left-6 md:left-24 text-4xl cursor-pointer"
 						type="button"
 						onClick={handleBack}
 					>
