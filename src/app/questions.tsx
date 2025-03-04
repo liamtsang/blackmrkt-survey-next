@@ -526,6 +526,80 @@ export const ImageMultipleChoiceQuestion = <T extends string>({
 	);
 };
 
+export const BrandMultipleChoiceQuestion = <T extends string>({
+	options,
+	value,
+	onChange,
+	onNext,
+	images,
+	colorCodes,
+}: MultipleChoiceQuestionProps<T>) => {
+	const getLetter = (index: number) => String.fromCharCode(65 + index);
+	return (
+		<div className="space-y-6 flex flex-col justify-center lg:max-w-[calc(100vw-12rem)]">
+			<div className="grid grid-cols-3 gap-2 lg:grid-cols-6 lg:gap-10 ">
+				{options.map((option, index) => {
+					const isSelected = value.includes(option);
+					return (
+						<div key={option} className="flex">
+							<div
+								className={`cursor-pointer relative ${isSelected ? "outline outline-green-500 rounded-lg" : ""}`}
+								onClick={() => {
+									const newValue = !isSelected
+										? [...value, option]
+										: value.filter((v) => v !== option);
+									onChange(newValue);
+								}}
+							>
+								{images?.[option] && (
+									<img
+										src={images[option]}
+										alt={option}
+										className="contrast-75 w-full h-full object-contain object-bottom align-bottom rounded-lg drop-shadow-md"
+									/>
+								)}
+								<input
+									type="checkbox"
+									id={option}
+									defaultChecked={isSelected}
+									className="left-[-999em] absolute"
+									readOnly
+								/>
+								<div className="absolute w-7 h-8 bg-[var(--bm-white)] z-3 top-[-1px] right-3">
+									<svg
+										className="w-full h-full"
+										viewBox="0 0 15 15"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<circle
+											r="5"
+											cy="7.5"
+											cx="7.5"
+											stroke="#6D6D6D"
+											strokeWidth="0.5"
+										/>
+										<title>Checkbox</title>
+										{isSelected && (
+											<path
+												d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
+												fill="black"
+												fillRule="evenodd"
+												clipRule="evenodd"
+											/>
+										)}
+									</svg>
+								</div>
+							</div>
+						</div>
+					);
+				})}
+			</div>
+			<NextButton onClickFunction={onNext} disabled={!value} />
+		</div>
+	);
+};
+
 export const TextMultipleChoiceQuestion = <T extends string>({
 	options,
 	value,
@@ -620,9 +694,11 @@ export const SizeQuestion = ({
 					id="size"
 					value={value[id] || ""}
 					onChange={(e) => onChange({ ...value, [id]: e.target.value })}
-					className="w-80 p-2 border rounded text-black"
+					className="w-80 p-2 border rounded text-white"
 				>
-					<option value="">Select {text}</option>
+					<option className="" value="">
+						Select {text}
+					</option>
 					{options.map((option) => (
 						<option key={option} value={option}>
 							{option}

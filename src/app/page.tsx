@@ -11,6 +11,7 @@ import {
 	EmailQuestion,
 	NumberQuestion,
 	HeightQuestion,
+	BrandMultipleChoiceQuestion,
 } from "./questions";
 import ScrambleText from "./ScrambleText";
 import { questions } from "./questions_json";
@@ -276,6 +277,25 @@ export default function Survey() {
 					(value as unknown as ResponseTypes["multiple_choice"]) || [];
 				return (
 					<ImageMultipleChoiceQuestion
+						options={question.options ?? []}
+						value={multiValue}
+						onChange={(newValue) =>
+							setResponses((prev) => ({
+								...prev,
+								[question.id]: newValue as unknown as ResponseType,
+							}))
+						}
+						onNext={handleNext}
+						images={question.images}
+						colorCodes={question.colorCodes}
+					/>
+				);
+			}
+			case "brand_multiple_choice": {
+				const multiValue =
+					(value as unknown as ResponseTypes["multiple_choice"]) || [];
+				return (
+					<BrandMultipleChoiceQuestion
 						options={question.options ?? []}
 						value={multiValue}
 						onChange={(newValue) =>
